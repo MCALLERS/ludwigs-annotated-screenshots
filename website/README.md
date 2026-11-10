@@ -4,13 +4,17 @@ Static, dependency-free landing page for `screenshot.bombadillo-ai.com`.
 
 ## Preview
 
-From this directory, run `python3 preview.py`, then open `http://127.0.0.1:8095`. Use `--port 8096` if the port is busy. The preview binds only to localhost, serves the extensionless privacy route, and applies the production security headers.
+From this directory, run `python3 preview.py`, then open `http://127.0.0.1:8095`. Use `--port 8096` if the port is busy. The preview binds only to localhost, serves the extensionless privacy and setup routes, and applies the production security headers.
+
+## Public availability — 10 November 2026
+
+The iPad app is now available free on the [US App Store](https://apps.apple.com/us/app/ludwigs-annotated-screenshots/id6827539095). The website source links directly to it, includes the iPad Smart App Banner, and provides `/setup` instructions. Desktop and mobile previews were checked. Native nearby connectivity is **not in the current public downloads**; retain the current private-network guidance until both updated apps have shipped.
 
 ## Mac release — 28 October 2026
 
 **Ludwig’s Annotated Screenshots 0.5.1** is published in [GitHub release v0.5.1-beta.1](https://github.com/MCALLERS/ludwigs-annotated-screenshots/releases/tag/v0.5.1-beta.1), with asset `Ludwigs-Annotated-Screenshots-0.5.1-arm64.dmg`. A fresh download from the public URL passed the portable SHA-256 checksum, app and DMG signatures, stapled notarization tickets, Gatekeeper assessment, the Mac self-test, and the isolated companion-protocol checks. Its SHA-256 is `563cc48d601775babfc11b72369c11d05a701e6d24d2114256171beb9d22a901`.
 
-All main calls to action lead to the one `#download` section. It offers the Mac DMG, three inline setup steps using Safari on iPad without TestFlight, the full setup guide, and the native iPad TestFlight invitation. Native iPad **0.5.1 (17)** is **Approved** and available in the existing **Public Beta** group, with text/voice notes, the navigation fix, artwork, quotes, and Clear queue. Text/voice notes require the native app; Safari continues to support drawing. The existing Mac 0.5.1 download supports both.
+The main calls to action lead to `#download`, which offers the verified Mac DMG and the free native iPad App Store app. The `/setup` guide explains installation, fresh QR pairing for a different Mac, Pencil/text/Dictation, and the current guest-Wi-Fi limitation. The iPad Smart App Banner uses app ID `6827539095`. Safari remains a drawing-only alternative on a trusted private network.
 
 For future updates, publish and verify the intended release asset before pushing a website download-link change to the auto-deployed branch. Then check the live page, privacy route, local assets, and exact downloaded DMG/checksum.
 
@@ -25,7 +29,7 @@ For a manual deployment, run `npx wrangler@4.141.0 deploy` from this directory w
 ## Maintenance
 
 - Update the `data-download` link and visible beta version in `public/index.html` when publishing a Mac release. Use a verified, signed/notarized DMG asset URL.
-- The unchanged public native iPad TestFlight invitation is verified and linked. Ludwig’s Annotated Screenshots **0.5.1 (17)** is **Approved** and available in the existing **Public Beta** group; automatic tester notification was enabled. The full App Store version **1.0** remains **Prepare for Submission**. The Safari companion is included with the Mac download and needs no TestFlight, but does not have the text/voice-note editor.
+- The App Store link is the primary iPad install route. Historical TestFlight invitation: `https://testflight.apple.com/join/bFbsKKmV`. Do not replace current-release network guidance with upcoming Nearby claims until both updated apps are publicly released.
 - Keep `public/privacy.html` consistent with `../docs/PRIVACY.md` when storage or networking changes.
 - The new Ludwig artwork is `public/assets/ludwig-portrait.png`; generation notes are in `design/ludwig-image-prompt.md`. The 36-second canvas explainer is drawn by `public/film.js`; it is an explicitly labeled illustration with fictional interfaces, not an app recording.
 - `public/character.js` animates the existing portrait with an eight-second drawing gesture. `public/hero.js` starts it on arrival and loops continuously while visible, with Pause/Resume controls. A saved site motion choice can override or restore the device preference. `public/music.js` supplies original Web Audio music and local narration synchronized with film playback. Sound is on by default; a real click unlocks it when browser autoplay policy requires that. The six local narration clips use the owner’s Sarcastic Old Man voice; music ducks beneath speech. Fish Audio is used only by the private local generation helper, never by the website.

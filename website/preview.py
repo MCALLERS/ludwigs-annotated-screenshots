@@ -15,8 +15,9 @@ class Handler(SimpleHTTPRequestHandler):
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
     def do_GET(self):
-        if self.path.split('?')[0] == '/privacy':
-            self.path = '/privacy.html'
+        route = self.path.split('?')[0]
+        if route in ('/privacy', '/setup'):
+            self.path = route + '.html'
         super().do_GET()
 
     def end_headers(self):
