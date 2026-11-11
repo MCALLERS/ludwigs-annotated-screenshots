@@ -6,11 +6,13 @@ See [build instructions](../docs/BUILDING.md), [setup](../docs/GETTING-STARTED.m
 
 The native app and Safari companion share the same local Mac protocol, but keep their pairing credentials and unfinished drafts separately. Saves are full-resolution flattened PNGs, limited to 16 million pixels. Local retry data includes a stable submission ID so a dropped response does not duplicate an export.
 
-## Release status — 28 October 2026
+## Release status — 10 November 2026
 
-Native iPad **0.5.1 (17)** is **Approved** and available in the existing **Public Beta** TestFlight group. Earlier builds **0.5.1 (14)** and **0.5.0 (13)** are also approved. The full App Store version **1.0** remains **Prepare for Submission**; beta approval is separate from an App Store release.
+The iPad app is **available free on the [US App Store](https://apps.apple.com/us/app/ludwigs-annotated-screenshots/id6827539095)** and appears in Apple’s iPad search for its full name. App Store Connect required a fresh sign-in during this check; availability was verified directly on the public storefront.
 
-Build **0.5.1 (17)** passed local validation, upload, and Beta App Review. Existing testers can update in TestFlight; new testers can use the unchanged [public invitation](https://testflight.apple.com/join/bFbsKKmV). Automatic tester notification was enabled. The existing Mac 0.5.1 download supports its PNG handoff without an update.
+The working source is **1.1 (21), unreleased**. It adds encrypted nearby pairing with Mac companion 0.6.0 (15), using Apple peer-to-peer networking. Existing local-HTTP pairing remains compatible. Physical guest-network validation and App Store review are still required before releasing it. See [nearby connection notes](../docs/NEARBY-CONNECTION.md).
+
+The sections below document earlier builds and the features included in the public release.
 
 ## Build 17: text and voice notes
 

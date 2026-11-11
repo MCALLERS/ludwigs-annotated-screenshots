@@ -111,6 +111,9 @@ struct Library {
     @Published var qrImage: NSImage?
     @Published var connection = "Starting iPad connection…"
     @Published var address = ""
+    @Published var nearbyReady = false
+    @Published var useLegacyConnection = false { didSet { updatePairingQR() } }
+    private var nearbyBridge: NearbyBridge?
     private var pairingURL: URL?
     private var token = ""
     private var port = 0
@@ -187,20 +190,26 @@ struct Library {
         }
     }
     func checkService() {
-        guard let service, service.isRunning else { connection = "iPad connection stopped — reopen Ludwig's Annotated Screenshots"; return }
+        guard let service, service.isRunning else {
+            nearbyBridge?.stop(); nearbyBridge = nil; nearbyReady = false; qrImage = nil
+            connection = "iPad connection stopped — reopen Ludwig's Annotated Screenshots"; return
+        }
         if token.isEmpty, let config = readJSON("server.json"), (config["pid"] as? Int) == Int(service.processIdentifier), let value = config["token"] as? String, let serverPort = config["port"] as? Int {
             token = value; port = serverPort
             if let lan = config["lan"] as? String {
                 address = "http://\(lan):\(port)"
                 pairingURL = URL(string: address + "/#pair=" + value)
-                let filter = CIFilter.qrCodeGenerator()
-                filter.message = Data(pairingURL!.absoluteString.utf8)
-                filter.correctionLevel = "M"
-                if let output = filter.outputImage?.transformed(by: CGAffineTransform(scaleX: 8, y: 8)), let cg = CIContext().createCGImage(output, from: output.extent) {
-                    qrImage = NSImage(cgImage: cg, size: NSSize(width: cg.width, height: cg.height))
+            }
+            do {
+                nearbyBridge = try NearbyBridge(token: value, localPort: serverPort) { [weak self] ready in
+                    Task { @MainActor in
+                        guard let self else { return }
+                        self.nearbyReady = ready; self.updatePairingQR()
+                        self.connection = ready ? "Ready for nearby iPad" : "Nearby connection unavailable — check Local Network access or reopen the Mac app"
+                    }
                 }
-                connection = "Ready for your iPad"
-            } else { connection = "Connect this Mac to your local network, then reopen Ludwig's Annotated Screenshots" }
+            } catch { connection = "Could not start nearby connection. Reopen the Mac app." }
+            updatePairingQR()
         }
         guard port > 0, !checkingConnection else { return }
         checkingConnection = true
@@ -212,9 +221,23 @@ struct Library {
             Task { @MainActor in
                 guard let self else { return }
                 self.checkingConnection = false
-                if !self.address.isEmpty { self.connection = Date().timeIntervalSince1970 - seen < 20 ? "Companion connected" : "Ready for your iPad" }
+                if self.nearbyReady || self.useLegacyConnection {
+                    self.connection = Date().timeIntervalSince1970 - seen < 20 ? "Companion connected" : (self.nearbyReady ? "Ready for nearby iPad" : "Ready for your iPad")
+                }
             }
         }.resume()
+    }
+    func updatePairingQR() {
+        qrImage = nil
+        let link: String?
+        if useLegacyConnection { link = pairingURL?.absoluteString }
+        else { link = nearbyReady ? "ludwig://nearby/#pair=" + token : nil }
+        guard let link else { return }
+        let filter = CIFilter.qrCodeGenerator()
+        filter.message = Data(link.utf8); filter.correctionLevel = "M"
+        if let output = filter.outputImage?.transformed(by: CGAffineTransform(scaleX: 8, y: 8)), let cg = CIContext().createCGImage(output, from: output.extent) {
+            qrImage = NSImage(cgImage: cg, size: NSSize(width: cg.width, height: cg.height))
+        }
     }
     func checkCompletion() {
         guard let result = readJSON("last-completion.json"), let id = result["id"] as? String, id != lastCompletion, let name = result["filename"] as? String, name == (name as NSString).lastPathComponent, name.hasSuffix(".png") else { return }
@@ -376,13 +399,22 @@ struct PairingView: View {
         VStack(spacing: 18) {
             HStack { Text("Connect your iPad").font(.title2.weight(.semibold)); Spacer(); Button("Close") { dismiss() } }
             Text("In Ludwig's Annotated Screenshots on your iPad, tap Scan Mac QR code.").foregroundStyle(.secondary)
+            Picker("Connection", selection: $model.useLegacyConnection) {
+                Text("Nearby · iPad 1.1+").tag(false)
+                Text("Safari / iPad 1.0").tag(true)
+            }.pickerStyle(.segmented)
             if let qr = model.qrImage {
                 Image(nsImage: qr).interpolation(.none).resizable().scaledToFit().frame(width: 260, height: 260).padding(16).background(.white).clipShape(RoundedRectangle(cornerRadius: 16))
             } else { ProgressView().frame(width: 260, height: 200); Text(model.connection) }
-            Text("Prefer Safari? Scan with the iPad Camera app instead.\nUse Share → Add to Home Screen to keep it handy.").multilineTextAlignment(.center)
-            Text("Both devices need to be on the same local network.\nKeep this Mac app open. No cloud upload is used.").font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
-            Text(model.address).font(.caption.monospaced()).foregroundStyle(.secondary)
-            Button("Open iPad view on this Mac", action: model.openCompanion).disabled(model.qrImage == nil)
+            if model.useLegacyConnection {
+                Text("For Safari, scan with the iPad Camera. For iPad app 1.0, scan inside Ludwig’s.").multilineTextAlignment(.center)
+                Text("Use a trusted private network. This legacy connection is unencrypted and guest Wi-Fi may block it.").font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                Text(model.address.isEmpty ? "No private network address found. Use Nearby with iPad app 1.1+." : model.address).font(.caption.monospaced()).foregroundStyle(.secondary)
+                Button("Open iPad view on this Mac", action: model.openCompanion).disabled(model.address.isEmpty)
+            } else {
+                Text("Encrypted connection for nearby devices.\nKeep Wi-Fi and Bluetooth on and both apps open.").multilineTextAlignment(.center)
+                Text("Requires iPad app 1.1 or later. No shared router or cloud upload is needed. Scan again when switching Macs.").font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
+            }
         }.padding(28).frame(width: 480)
     }
 }

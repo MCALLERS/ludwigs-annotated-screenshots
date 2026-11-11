@@ -1,5 +1,7 @@
 # Architecture
 
+**Development update (10 November 2026):** Mac 0.6.0 / iPad 1.1 add an encrypted native nearby transport that bridges to the existing loopback API. It is implemented and locally tested, not publicly released. See [Nearby connection](NEARBY-CONNECTION.md) for protocol details, compatibility, and physical-device validation still required. The diagram and local-HTTP description below describe the current public release and retained legacy transport.
+
 ```mermaid
 flowchart LR
     A[macOS screenshot shortcut] --> B[Documents / Screenshot Tool / Inbox]

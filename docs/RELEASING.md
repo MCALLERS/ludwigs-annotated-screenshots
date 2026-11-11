@@ -16,8 +16,8 @@ The app bundles and display names are `Ludwig's Annotated Screenshots`; the Mac 
 
 The new Mac app has a different bundle filename. Quit the old companion before opening it; do not run both versions together. Installation and physical-device capture/markup/paste verification remain separate from build and automated test validation.
 
-## Beta review notes
+## Current review notes
 
-This iPad companion requires the free Mac companion, downloadable from the GitHub releases page. No app account is required. Both devices must be on the same trusted private network. Install the Mac app, set up its screenshot folder, choose Connect iPad, and scan the displayed QR code from the native iPad app. Capture with ⇧⌘4; annotate with Pencil or enable Finger drawing; tap Done; wait for copied confirmation and paste on Mac. For a batch, capture three screenshots and use Done & Next.
+For the 1.1 update, use [App Store 1.1 metadata and review instructions](APP-STORE-1.1.md). The current release adds encrypted Nearby mode using Apple system TLS; legacy Safari/iPad 1.0 retains unencrypted local HTTP. Preserve this distinction in website copy, privacy disclosures, and review notes.
 
-Camera access is only for QR scanning; Local Network access transfers screenshots directly between the user’s devices. No screenshot is uploaded to a developer server. The local connection is authenticated HTTP, without custom encryption. The companion does not directly integrate with an AI service; users choose where to paste their own images.
+The owner authorized release on 11 November after successful physical different-network testing and the build 21 latency improvement. Actual isolated guest-network, broad hardware, and extended batch/sleep-wake testing remain unverified; do not describe them as passed or promise operation on every network. The App Store update must complete Apple review before being described as live.

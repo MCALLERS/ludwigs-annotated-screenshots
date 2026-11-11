@@ -2,13 +2,13 @@
 
 <img src="../Branding/BrandMark.png" width="200" alt="Screenshot and pencil mark">
 
-Start at the [website](https://screenshot.bombadillo-ai.com) for the Mac download and iPad invitation.
+Start at the [website](https://screenshot.bombadillo-ai.com) for the Mac download and iPad App Store link.
 
-**Publication status, checked 28 October 2026:** Mac **0.5.1 (14)** is published as [`v0.5.1-beta.1`](https://github.com/MCALLERS/ludwigs-annotated-screenshots/releases/tag/v0.5.1-beta.1); the public download and website were verified. Native iPad **0.5.1 (17)** is **Approved** and available in the existing **Public Beta** TestFlight group, including text/voice notes and the navigation fix. The full App Store version **1.0** remains **Prepare for Submission**; colleagues install the native app through TestFlight.
+**11 November 2026:** Mac 0.6.0 supports both the current iPad App Store version 1.0 and the upcoming 1.1 Nearby update. The iPad update awaits its separate App Store release. Choose the pairing mode for your installed iPad version as described below.
 
 ## Install on your Mac
 
-1. Follow **Download for Mac** on the [website](https://screenshot.bombadillo-ai.com), or open the verified [Mac 0.5.1 release](https://github.com/MCALLERS/ludwigs-annotated-screenshots/releases/tag/v0.5.1-beta.1) directly. Download `Ludwigs-Annotated-Screenshots-0.5.1-arm64.dmg`. Earlier releases retain the Fatty Lumpkin name.
+1. Follow **Download for Mac** on the [website](https://screenshot.bombadillo-ai.com), or open the verified [Mac 0.6.0 release](https://github.com/MCALLERS/ludwigs-annotated-screenshots/releases/tag/v0.6.0) directly. Download `Ludwigs-Annotated-Screenshots-0.6.0-arm64.dmg`. Earlier releases retain the Fatty Lumpkin name.
 2. Open it and drag **Ludwig's Annotated Screenshots.app** to **Applications**.
 3. Open the app from Applications. Keep it running while you annotate.
 4. Click **Set up screenshot folder** if it appears. This changes macOS screenshots to PNG and saves them in **Documents → Screenshot Tool → Inbox**. It preserves the previous location, format, and HDR settings for restoration from the menu-bar app menu.
@@ -16,15 +16,17 @@ Start at the [website](https://screenshot.bombadillo-ai.com) for the Mac downloa
 
 ### Updating from Fatty Lumpkin
 
-Version 0.5.1 adopts the new name and icon. Quit the old Mac app before opening the new one, and keep only one companion running. Remove the old app bundle from Applications after confirming the new one opens; your screenshot folders and pairing settings live separately and stay in place. Update the existing iPad app through TestFlight to the latest offered build. Its identity and saved pairing remain the same. The existing Mac 0.5.1 download also supports iPad build 17's text notes.
+Version 0.5.1 adopts the new name and icon. Quit the old Mac app before opening the new one, and keep only one companion running. Remove the old app bundle from Applications after confirming the new one opens; your screenshot folders and pairing settings live separately and stay in place. Install or update the iPad app through the App Store. Its identity and saved pairing remain the same. The existing Mac 0.5.1 download also supports iPad build 17's text notes.
 
 ## Connect your iPad
 
-Use the same trusted local network on both devices. Guest networks often prevent devices from communicating.
+**iPad 1.1+:** select **Nearby · iPad 1.1+** in the Mac Connect iPad window. Keep both apps open, devices nearby, and Wi-Fi and Bluetooth enabled. The devices can use different Wi-Fi networks.
 
-**Native app:** open the [TestFlight invitation](https://testflight.apple.com/join/bFbsKKmV) on your iPad. Install Apple's TestFlight app if prompted, return to the invitation, and install **Ludwig's Annotated Screenshots**. Build **0.5.1 (17)** is approved for Public Beta. Existing testers can tap **Update** in TestFlight. Open the installed app, tap **Connect your Mac**, then **Scan Mac QR code**. On Mac, click **Connect iPad**. Scan that QR code from inside the iPad app. Allow Camera and Local Network access.
+**iPad 1.0 or Safari:** select **Safari / iPad 1.0** and use the same trusted private network. Guest networks can block this legacy connection.
 
-**Safari alternative:** scan the Mac QR code with the iPad Camera app and open the link in Safari. Use **Share → Add to Home Screen** to save a shortcut. You can bookmark the paired page too.
+**Native iPad app:** install [Ludwig’s Annotated Screenshots from the App Store](https://apps.apple.com/us/app/ludwigs-annotated-screenshots/id6827539095). No TestFlight is needed. Open the app, tap **Connect your Mac**, then **Scan Mac QR code**. On Mac, click **Connect iPad**. Scan that QR from inside the iPad app. Allow Camera and Local Network access.
+
+**Safari alternative:** choose **Safari / iPad 1.0** on Mac, then scan the Mac QR code with the iPad Camera app and open the link in Safari. Use **Share → Add to Home Screen** to save a shortcut. You can bookmark the paired page too.
 
 The native app remembers its pairing in Keychain. Safari remembers it in its own website storage. Pair them separately if you use both. Do not share a pairing QR code; it contains your local connection key.
 
@@ -43,9 +45,9 @@ Take screenshots consecutively. The iPad queues unfinished captures in chronolog
 
 The clipboard contains the most recently completed image. For the whole batch, press **Control–Option–Command–S** on Mac, select the finished PNGs in Finder, then drag them into your agent. Clipboard support for multiple files varies by agent.
 
-## Text and voice notes (native build 0.5.1 (17))
+## Text and voice notes (native iPad app)
 
-Build 17 is approved and available through Public Beta. Update through TestFlight and check for **Beta 0.5.1 (17)** in the app footer. Safari and earlier native builds do not have this editor.
+Text and voice notes are included in the App Store release. Safari does not have this editor.
 
 1. With a screenshot open, tap **Text / voice**, then tap a place on the image.
 2. Use the microphone on the iPad keyboard to dictate, or type.
@@ -93,9 +95,9 @@ The Mac app also has **Open finished screenshots** and **Open all screenshot fol
 
 ## After switching everything off
 
-Open the Mac app from **Applications**, then open the iPad app. Normally it reconnects automatically. No USB cable or new scan is needed when the Mac address is unchanged. Keep the Mac awake while working.
+Open the Mac app from **Applications**, then open the iPad app. Normally it reconnects automatically. No USB cable is needed. Nearby pairing uses the Mac’s service identity rather than a fixed IP address. Keep the Mac awake while working.
 
-If you changed Wi-Fi or the Mac’s IP address changed, quit and reopen the Mac app, click **Connect iPad**, and scan the new code in the iPad app. **Retry** keeps using the old address; use **Scan Mac QR code** for the new one.
+When switching Macs, scan the new Mac’s QR. For legacy pairing, a changed Mac IP address also requires a fresh QR. If Nearby cannot reconnect, keep the radios enabled, reopen the Mac companion, and scan its Nearby QR again. Your drawings remain on the iPad for retry.
 
 ## Stop using the workflow
 

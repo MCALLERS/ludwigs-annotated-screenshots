@@ -40,17 +40,26 @@ struct Connection: Codable, Equatable {
     let baseURL: URL
     let token: String
     var namespace: String { SHA256.hash(data: Data(token.utf8)).prefix(12).map { String(format: "%02x", $0) }.joined() }
-    var displayName: String { baseURL.host ?? "Your Mac" }
+    var isNearby: Bool { baseURL.scheme == "ludwig" }
+    var displayName: String { isNearby ? "Nearby Mac" : (baseURL.host ?? "Your Mac") }
     static func parse(_ text: String) throws -> Connection {
         guard let parts = URLComponents(string: text.trimmingCharacters(in: .whitespacesAndNewlines)),
-              parts.scheme == "http", let host = parts.host, isLocalHost(host),
+              let host = parts.host,
               parts.user == nil, parts.password == nil, parts.query == nil,
-              parts.path.isEmpty || parts.path == "/", let port = parts.port, (1...65535).contains(port),
+              parts.path.isEmpty || parts.path == "/",
               let fragment = parts.fragment,
-              let token = URLComponents(string: "?" + fragment)?.queryItems?.first(where: { $0.name == "pair" })?.value,
+              let items = URLComponents(string: "?" + fragment)?.queryItems,
+              items.filter({ $0.name == "pair" }).count == 1,
+              let token = items.first(where: { $0.name == "pair" })?.value,
               (16...128).contains(token.count), token.allSatisfy({ $0.isASCII && ($0.isLetter || $0.isNumber || $0 == "-" || $0 == "_") })
         else { throw AppError.message("Scan the Connect iPad QR code in Ludwig's Annotated Screenshots on your Mac.") }
-        var base = URLComponents(); base.scheme = "http"; base.host = host; base.port = port
+        var base = URLComponents(); base.scheme = parts.scheme; base.host = host
+        if parts.scheme == "ludwig", host == "nearby", parts.port == nil {
+            // Resolve this paired Mac over Bonjour, including Apple peer-to-peer Wi-Fi.
+            // No IP address, router access, or plaintext downgrade is needed.
+        } else if parts.scheme == "http", isLocalHost(host), let port = parts.port, (1...65535).contains(port) {
+            base.port = port
+        } else { throw AppError.message("Scan the Connect iPad QR code on your Mac.") }
         guard let url = base.url else { throw AppError.message("The Mac address is invalid.") }
         return Connection(baseURL: url, token: token)
     }

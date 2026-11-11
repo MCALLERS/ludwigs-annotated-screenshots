@@ -16,18 +16,26 @@ for paths,rr,bb in [(sources,refs,builds),(tests,testrefs,testbuilds)]:
  for p in paths:
   key=str(p.relative_to(root));r=obj(key,'isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "'+p.name+'"; sourceTree = "<group>";');rr.append(r)
   bb.append(obj('build:'+key,'isa = PBXBuildFile; fileRef = '+r+';'))
+sharedrefs=[]
+for p in sorted((root.parent/'Shared').glob('*.swift')):
+ key='Shared/'+p.name
+ r=obj(key,'isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = '+p.name+'; sourceTree = "<group>";');sharedrefs.append(r)
+ builds.append(obj('build:'+key,'isa = PBXBuildFile; fileRef = '+r+';'))
 arr=lambda xs:'('+','.join(xs)+')'
 appProduct=obj('appProduct','isa = PBXFileReference; explicitFileType = wrapper.application; path = '+json.dumps(product_name+'.app')+'; sourceTree = BUILT_PRODUCTS_DIR;')
 testProduct=obj('testProduct','isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = ScreenshotToolTests.xctest; sourceTree = BUILT_PRODUCTS_DIR;')
 info=obj('info','isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>";')
 assets=obj('assets','isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>";')
 assetBuild=obj('assetbuild','isa = PBXBuildFile; fileRef = '+assets+';')
-appGroup=obj('appGroup','isa = PBXGroup; children = '+arr(refs+[info,assets])+'; path = ScreenshotTool; sourceTree = "<group>";')
+privacy=obj('privacy','isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>";')
+privacyBuild=obj('privacybuild','isa = PBXBuildFile; fileRef = '+privacy+';')
+appGroup=obj('appGroup','isa = PBXGroup; children = '+arr(refs+[info,assets,privacy])+'; path = ScreenshotTool; sourceTree = "<group>";')
 testGroup=obj('testGroup','isa = PBXGroup; children = '+arr(testrefs)+'; path = ScreenshotToolTests; sourceTree = "<group>";')
 products=obj('products','isa = PBXGroup; children = '+arr([appProduct,testProduct])+'; name = Products; sourceTree = "<group>";')
-main=obj('main','isa = PBXGroup; children = '+arr([appGroup,testGroup,products])+'; sourceTree = "<group>";')
+sharedGroup=obj('sharedGroup','isa = PBXGroup; children = '+arr(sharedrefs)+'; path = ../Shared; sourceTree = "<group>";')
+main=obj('main','isa = PBXGroup; children = '+arr([appGroup,testGroup,sharedGroup,products])+'; sourceTree = "<group>";')
 def phase(name,kind,files=[]):return obj(name,'isa = '+kind+'; buildActionMask = 2147483647; files = '+arr(files)+'; runOnlyForDeploymentPostprocessing = 0;')
-appPhases=[phase('appSources','PBXSourcesBuildPhase',builds),phase('appFrameworks','PBXFrameworksBuildPhase'),phase('appResources','PBXResourcesBuildPhase',[assetBuild])]
+appPhases=[phase('appSources','PBXSourcesBuildPhase',builds),phase('appFrameworks','PBXFrameworksBuildPhase'),phase('appResources','PBXResourcesBuildPhase',[assetBuild,privacyBuild])]
 testPhases=[phase('testSources','PBXSourcesBuildPhase',testbuilds),phase('testFrameworks','PBXFrameworksBuildPhase'),phase('testResources','PBXResourcesBuildPhase')]
 def configs(name,values):
  ids=[]
@@ -40,7 +48,7 @@ def configs(name,values):
  return obj(name+'list','isa = XCConfigurationList; buildConfigurations = '+arr(ids)+'; defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;')
 common={'SDKROOT':'iphoneos','IPHONEOS_DEPLOYMENT_TARGET':'18.0','SWIFT_VERSION':'5.0','TARGETED_DEVICE_FAMILY':'2','SUPPORTED_PLATFORMS':'iphoneos iphonesimulator','CLANG_ENABLE_MODULES':'YES','CODE_SIGN_STYLE':'Automatic'}
 projectConfigs=configs('project',common)
-appConfigs=configs('app',{'PRODUCT_NAME':product_name,'PRODUCT_MODULE_NAME':'ScreenshotToolNative','EXECUTABLE_NAME':'ScreenshotToolNative','PRODUCT_BUNDLE_IDENTIFIER':'com.mcallers.screenshottool.ipad','INFOPLIST_FILE':'ScreenshotTool/Info.plist','MARKETING_VERSION':'0.5.1','CURRENT_PROJECT_VERSION':'17','ASSETCATALOG_COMPILER_APPICON_NAME':'AppIcon','LD_RUNPATH_SEARCH_PATHS':'$(inherited) @executable_path/Frameworks','SUPPORTS_MACCATALYST':'NO','SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD':'NO'})
+appConfigs=configs('app',{'PRODUCT_NAME':product_name,'PRODUCT_MODULE_NAME':'ScreenshotToolNative','EXECUTABLE_NAME':'ScreenshotToolNative','PRODUCT_BUNDLE_IDENTIFIER':'com.mcallers.screenshottool.ipad','INFOPLIST_FILE':'ScreenshotTool/Info.plist','MARKETING_VERSION':'1.1','CURRENT_PROJECT_VERSION':'21','ASSETCATALOG_COMPILER_APPICON_NAME':'AppIcon','LD_RUNPATH_SEARCH_PATHS':'$(inherited) @executable_path/Frameworks','SUPPORTS_MACCATALYST':'NO','SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD':'NO'})
 testConfigs=configs('test',{'PRODUCT_NAME':'ScreenshotToolTests','PRODUCT_BUNDLE_IDENTIFIER':'com.mcallers.screenshottool.ipad.tests','GENERATE_INFOPLIST_FILE':'YES','TEST_HOST':'$(BUILT_PRODUCTS_DIR)/'+product_name+'.app/ScreenshotToolNative','BUNDLE_LOADER':'$(TEST_HOST)','LD_RUNPATH_SEARCH_PATHS':'$(inherited) @executable_path/Frameworks @loader_path/Frameworks'})
 app=obj('appTarget','isa = PBXNativeTarget; buildConfigurationList = '+appConfigs+'; buildPhases = '+arr(appPhases)+'; buildRules = (); dependencies = (); name = ScreenshotToolNative; productName = '+json.dumps(product_name)+'; productReference = '+appProduct+'; productType = "com.apple.product-type.application";')
 proxy=obj('proxy','isa = PBXContainerItemProxy; containerPortal = '+uid('projectRoot')+'; proxyType = 1; remoteGlobalIDString = '+app+'; remoteInfo = ScreenshotToolNative;')

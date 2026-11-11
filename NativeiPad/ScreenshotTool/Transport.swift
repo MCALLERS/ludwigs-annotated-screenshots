@@ -15,6 +15,10 @@ final class MacClient {
         session = URLSession(configuration: config, delegate: NoRedirects(), delegateQueue: nil)
     }
     func request(_ path: String, body: Data? = nil, headers: [String: String] = [:]) async throws -> Data {
+        if connection.isNearby {
+            let response = try await NearbyExchange.request(NearbyRequest(path: path, body: body, headers: headers), token: connection.token)
+            return try checked(response.body, status: response.status)
+        }
         var request = URLRequest(url: connection.baseURL.appendingPathComponent(path))
         request.setValue("Bearer " + connection.token, forHTTPHeaderField: "Authorization")
         request.cachePolicy = .reloadIgnoringLocalCacheData
@@ -22,8 +26,11 @@ final class MacClient {
         for (key, value) in headers { request.setValue(value, forHTTPHeaderField: key) }
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw AppError.message("The Mac did not respond.") }
-        if http.statusCode == 401 { throw AppError.message("Pair again using Connect iPad on your Mac.") }
-        guard (200...299).contains(http.statusCode) else {
+        return try checked(data, status: http.statusCode)
+    }
+    private func checked(_ data: Data, status: Int) throws -> Data {
+        if status == 401 { throw AppError.message("Pair again using Connect iPad on your Mac.") }
+        guard (200...299).contains(status) else {
             throw AppError.message((try? JSONDecoder().decode(APIError.self, from: data).error) ?? "The Mac could not complete that request. Your drawing is kept on this iPad.")
         }
         guard data.count <= 40 * 1024 * 1024 else { throw AppError.message("That image is too large. Capture a smaller area on the Mac.") }

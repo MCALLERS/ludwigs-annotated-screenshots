@@ -3,12 +3,13 @@
 ## Connection times out
 
 - Keep the Mac companion running and the Mac awake.
-- Put both devices on the same trusted network. A guest network or router’s client isolation can block local connections even when the Wi-Fi names match.
+- With iPad 1.1+ and Mac 0.6.0+, select Nearby on the Mac, keep the devices close, and enable Wi-Fi and Bluetooth. Do not turn off the Wi-Fi radio when testing different networks.
+- With iPad 1.0, Safari, or legacy pairing, use the same trusted private network; guest-network isolation can block that mode.
 - After changing networks, quit and reopen the Mac app and scan its new QR code. The displayed Mac address should belong to a network reachable from the iPad. Retry alone uses the old address.
 - On iPad: **Settings → Privacy & Security → Local Network**; allow the app. For camera permission, use the Camera section there.
 - On Mac: **System Settings → Privacy & Security → Local Network**; allow the companion if listed. If the firewall asks, allow incoming connections for this app. Do not disable the firewall.
 - If a VPN prevents local access, use its supported local-network setting or consult its documentation.
-- Try the Safari companion. If Safari also fails, investigate the Mac/network connection before the native app.
+- Safari tests only the legacy private-network path; it cannot test Nearby peer discovery.
 
 ## New screenshot does not appear
 

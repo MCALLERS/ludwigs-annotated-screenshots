@@ -6,20 +6,22 @@
 
 A small Mac companion and a native PencilKit iPad app that turn screenshots into clear visual feedback. Circle the awkward button, sketch a new layout, or write a note—then tap **Done**. Your marked-up PNG is saved on the Mac and copied to its clipboard.
 
-[Website](https://screenshot.bombadillo-ai.com) · [iPad TestFlight](https://testflight.apple.com/join/bFbsKKmV) · [Mac downloads](https://github.com/MCALLERS/ludwigs-annotated-screenshots/releases) · [Getting started](docs/GETTING-STARTED.md) · [Troubleshooting](docs/TROUBLESHOOTING.md) · [Privacy](docs/PRIVACY.md)
+[Website](https://screenshot.bombadillo-ai.com) · [iPad App Store](https://apps.apple.com/us/app/ludwigs-annotated-screenshots/id6827539095) · [Mac downloads](https://github.com/MCALLERS/ludwigs-annotated-screenshots/releases) · [Getting started](docs/GETTING-STARTED.md) · [Troubleshooting](docs/TROUBLESHOOTING.md) · [Privacy](docs/PRIVACY.md)
 
 ## Availability
 
-Start at the [website](https://screenshot.bombadillo-ai.com) for the workflow, Mac download, and iPad invitation. The Mac companion requires **Apple silicon and macOS 14 or later**; the native iPad app requires **iPadOS 18 or later**. Safari is included with the Mac companion and can be used immediately without TestFlight.
+Start at the [website](https://screenshot.bombadillo-ai.com) for the workflow, Mac download, and iPad App Store link. The Mac companion requires **Apple silicon and macOS 14 or later**; the native iPad app requires **iPadOS 18 or later**. Safari is included with the Mac companion and can be used immediately without a separate iPad installation.
 
 | Component | Current status |
 | --- | --- |
-| Mac 0.5.1 (14) | Published as [`v0.5.1-beta.1`](https://github.com/MCALLERS/ludwigs-annotated-screenshots/releases/tag/v0.5.1-beta.1); freshly downloaded package verified. |
-| Native iPad 0.5.1 (17) | **Approved** and available in the existing **Public Beta** TestFlight group. Includes editable text notes and keyboard Dictation, the navigation fix, Ludwig artwork, quotes, and Clear queue. Verified 28 October 2026. |
+| Mac 0.6.0 (16) | Signed and notarized companion: [`v0.6.0`](https://github.com/MCALLERS/ludwigs-annotated-screenshots/releases/tag/v0.6.0). |
+| Native iPad App Store release | **Available free on the [US App Store](https://apps.apple.com/us/app/ludwigs-annotated-screenshots/id6827539095)**, verified 10 November 2026. Apple’s iPad search returns the app for its full name. |
 
-TestFlight approval is separate from a public App Store release. The full App Store version **1.0** remains **Prepare for Submission**. Earlier iPad builds **0.5.1 (14)** and **0.5.0 (13)** are also approved. Existing testers can update to build 17 in TestFlight; new testers can use the same [public invitation](https://testflight.apple.com/join/bFbsKKmV).
+Mac 0.6.0 adds encrypted **Nearby** pairing for native iPad **1.1 (21)**. The iPad update is awaiting App Store release; the current public iPad version remains 1.0. Until 1.1 is available, select **Safari / iPad 1.0** in the Mac pairing window and use the same trusted private network.
 
-The public Mac asset is `Ludwigs-Annotated-Screenshots-0.5.1-arm64.dmg`. The website and renamed download were verified on 28 October 2026. Build 17's text notes use the existing PNG transfer, so no new Mac download is required for that feature. See the [upgrade note](docs/GETTING-STARTED.md#updating-from-fatty-lumpkin).
+With iPad 1.1+, keep Wi-Fi and Bluetooth enabled and the devices nearby. The owner confirmed a full round trip across different networks and faster screenshot arrival after the re-pairing fix. This does not guarantee every network or managed-device configuration. See [release notes](docs/RELEASE-0.6.0.md).
+
+The Mac asset is `Ludwigs-Annotated-Screenshots-0.6.0-arm64.dmg`. Existing screenshot folders, pairing identity and drafts are preserved; quit the old companion before opening the new one.
 
 ## The everyday loop
 
@@ -49,6 +51,6 @@ There is no app account, analytics SDK, cloud relay, or AI service integration. 
 - [Agent workflow skill](skills/screenshot-feedback/SKILL.md)
 - [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
-The working source includes native iPad build 17, now approved for Public Beta. See [build 17 notes](NativeiPad/LOCAL-BUILD-17.md) for the text/voice workflow, validation, and separate TestFlight publication record.
+The working source includes the unreleased nearby-connection update. See [nearby connection notes](docs/NEARBY-CONNECTION.md) and the [historical build 17 notes](NativeiPad/LOCAL-BUILD-17.md).
 
 The code is available under the [MIT license](LICENSE). The screenshot-and-pencil icon is an original vector mark; see [brand assets and provenance](Branding/ART-DIRECTION.md). This is an independent project, with no affiliation with Apple, OpenAI, Anthropic, or any fantasy franchise.

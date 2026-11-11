@@ -39,6 +39,7 @@ struct TextNoteEditor: Identifiable {
     private var locallySaved: Set<String> = []
     private var submission: String?
     private var polling = false
+    private var pollTask: Task<Void, Never>?
     private var manualSelection = false
     private var revision = 0
     private var draftTask: Task<Void, Never>?
@@ -53,6 +54,7 @@ struct TextNoteEditor: Identifiable {
     @Published private(set) var cleanupPreview: CleanupPreview?
     @Published private(set) var sessionNotice: String?
     private let configuration: URLSessionConfiguration
+    private let rememberConnection: (Connection) throws -> Void
     private let draftRoot: URL?
     private var acknowledgement: String?
     private var acknowledgementStarted: Date?
@@ -60,8 +62,9 @@ struct TextNoteEditor: Identifiable {
     private var pendingResetID: String?
     private let fallbackUndoManager = UndoManager()
 
-    init(connection: Connection? = ConnectionVault.read(), configuration: URLSessionConfiguration = .ephemeral, draftRoot: URL? = nil) {
-        self.configuration = configuration; self.draftRoot = draftRoot
+    init(connection: Connection? = ConnectionVault.read(), configuration: URLSessionConfiguration = .ephemeral, draftRoot: URL? = nil,
+         rememberConnection: @escaping (Connection) throws -> Void = ConnectionVault.write) {
+        self.configuration = configuration; self.draftRoot = draftRoot; self.rememberConnection = rememberConnection
         if let connection { configure(connection) }
         else { showPairing = true }
     }
@@ -221,6 +224,7 @@ struct TextNoteEditor: Identifiable {
     }
 
     private func configure(_ value: Connection) {
+        pollTask?.cancel()
         revision += 1; connection = value; client = MacClient(value, configuration: configuration); locallySaved = []; browser = nil
         librarySession = nil; librarySessionID = nil; supportsSessions = false; cleanupPreview = nil; pendingResetID = nil
         current = nil; image = nil; drawing = PKDrawing(); notes = []; noteEditor = nil; noteMode = false; dirty = false; acknowledgement = nil
@@ -241,24 +245,30 @@ struct TextNoteEditor: Identifiable {
         do {
             let candidate = try Connection.parse(text)
             pendingPairingLink = text; pairingAddress = candidate.displayName
-            _ = try await MacClient(candidate).library()
+            _ = try await MacClient(candidate, configuration: configuration).library()
             guard persist() else { return }
-            try ConnectionVault.write(candidate)
+            try rememberConnection(candidate)
             configure(candidate); connected = true; showPairing = false; error = nil; pendingPairingLink = nil; pairingAddress = nil
         } catch {
             if (error as? URLError)?.code == .timedOut {
-                self.error = "Could not reach the Mac at \(pairingAddress ?? "its local address"). Check that both devices are on the same local network, then tap Retry connection."
+                self.error = "Could not reach the Mac at \(pairingAddress ?? "its local address"). Guest Wi-Fi can block this older connection. Update the Mac companion and scan its Nearby QR code, or use a trusted private network. Allow Local Network access on both devices."
             } else { self.error = friendly(error) }
         }
     }
     func retryPairing() async { if let link = pendingPairingLink { await pair(link) } }
     func poll() async {
         guard let client, !polling, !busy, noteEditor == nil else { return }
-        polling = true; defer { polling = false }
+        polling = true
         let requestRevision = revision
+        let task = Task { await self.performPoll(client, requestRevision: requestRevision) }
+        pollTask = task
+        await withTaskCancellationHandler(operation: { await task.value }, onCancel: { task.cancel() })
+        pollTask = nil; polling = false
+    }
+    private func performPoll(_ client: MacClient, requestRevision: Int) async {
         do {
             let result = try await client.libraryState()
-            guard !busy, loadingID == nil, noteEditor == nil, revision == requestRevision else { return }
+            guard !Task.isCancelled, !busy, loadingID == nil, noteEditor == nil, revision == requestRevision else { return }
             applyLibrary(result); connected = true
             if browser == nil, !showSessionManager, !showClearQueueConfirmation, !showLudwigAbout, current == nil, let first = pending.first { await open(first, manual: false) }
             else if current == nil, completedMessage == nil { status = "Ready for your next screenshot." }
@@ -276,8 +286,10 @@ struct TextNoteEditor: Identifiable {
                 }
             }
         } catch {
+            guard !Task.isCancelled, revision == requestRevision else { return }
             connected = false
-            status = current == nil ? "Mac unavailable. Keep Ludwig's Annotated Screenshots open on the same network." : "Connection interrupted. Your drawing is kept on this iPad."
+            if connection?.isNearby == true { status = friendly(error) }
+            else { status = current == nil ? "Mac unavailable. Keep both apps open on the same private network." : "Connection interrupted. Your drawing is kept on this iPad." }
         }
     }
     @discardableResult func open(_ capture: Capture, manual: Bool = true) async -> Bool {
@@ -312,7 +324,10 @@ struct TextNoteEditor: Identifiable {
             if restoredLocal { status = "Local draft restored. The Mac source is unavailable; retry Done, or discard this drawing in Browse." }
             persistSession()
             return true
-        } catch { self.error = friendly(error); return false }
+        } catch {
+            if !Task.isCancelled, requestRevision == revision { self.error = friendly(error) }
+            return false
+        }
     }
     func drawingChanged(_ value: PKDrawing, selectionID: UUID) {
         guard selection == selectionID, current != nil, !busy, loadingID == nil else { return }

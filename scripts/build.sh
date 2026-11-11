@@ -1,7 +1,7 @@
 #!/bin/zsh
 set -euo pipefail
 project_dir="$(cd "$(dirname "$0")/.." && pwd)"
-app_dir="$project_dir/build/Ludwig's Annotated Screenshots.app"
+app_dir="${LUDWIG_BUILD_ROOT:-$project_dir/build}/Ludwig's Annotated Screenshots.app"
 # This is generated output: do not retain a frozen helper from an older build.
 if [[ -d "$app_dir" ]]; then rm -rf "$app_dir"; fi
 mkdir -p "$app_dir/Contents/MacOS" "$app_dir/Contents/Resources/Companion"
@@ -11,7 +11,7 @@ done
 cp "$project_dir/Branding/BrandMark.png" "$app_dir/Contents/Resources/BrandMark.png"
 cp "$project_dir/Branding/BrandMark.png" "$app_dir/Contents/Resources/Companion/brandmark.png"
 cp "$project_dir/Branding/AppIcon.icns" "$app_dir/Contents/Resources/AppIcon.icns"
-xcrun swiftc -parse-as-library -O -target arm64-apple-macos14.0 -framework SwiftUI -framework AppKit -framework ImageIO -framework UniformTypeIdentifiers -framework Carbon "$project_dir"/Sources/*.swift -o "$app_dir/Contents/MacOS/ScreenshotTool"
+xcrun swiftc -parse-as-library -O -target arm64-apple-macos14.0 -framework SwiftUI -framework AppKit -framework ImageIO -framework UniformTypeIdentifiers -framework Carbon "$project_dir"/Sources/*.swift "$project_dir"/Shared/*.swift -o "$app_dir/Contents/MacOS/ScreenshotTool"
 cat > "$app_dir/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -21,12 +21,13 @@ cat > "$app_dir/Contents/Info.plist" <<'PLIST'
 <key>CFBundleName</key><string>Ludwig's Annotated Screenshots</string>
 <key>CFBundleDisplayName</key><string>Ludwig's Annotated Screenshots</string>
 <key>CFBundleIconFile</key><string>AppIcon</string>
-<key>CFBundleVersion</key><string>14</string>
-<key>CFBundleShortVersionString</key><string>0.5.1</string>
+<key>CFBundleVersion</key><string>16</string>
+<key>CFBundleShortVersionString</key><string>0.6.0</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>LSMinimumSystemVersion</key><string>14.0</string>
 <key>NSHighResolutionCapable</key><true/>
 <key>NSLocalNetworkUsageDescription</key><string>Connect to your iPad on your local network so you can annotate screenshots with Apple Pencil.</string>
+<key>NSBonjourServices</key><array><string>_ludwig-p2p._tcp</string></array>
 </dict></plist>
 PLIST
 codesign --force --sign - "$app_dir"

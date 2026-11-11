@@ -43,7 +43,7 @@ struct WorkspaceView: View {
                         .accessibilityIdentifier("appTitle")
                     HStack(spacing: 5) {
                         Circle().fill(model.connected ? AppPalette.accent : Color.secondary).frame(width: 5, height: 5).accessibilityHidden(true)
-                        Text(model.connection == nil ? "Capture. Mark up. Make it clear." : model.connected ? "Connected to your Mac" : "Waiting for your Mac")
+                        Text(model.connection == nil ? "Capture. Mark up. Make it clear." : (model.connected ? "Connected · " : "Waiting · ") + (model.connection?.isNearby == true ? "Nearby" : "Local Wi-Fi"))
                     }.font(.caption).foregroundStyle(AppPalette.secondary)
                 }
                 Spacer()
@@ -101,7 +101,7 @@ struct WorkspaceView: View {
                 LudwigThoughtView(thought: TractatusThought.all[quoteIndex]) { model.showLudwigAbout = true }
                     .disabled(model.busy || model.loadingID != nil)
                 Divider().overlay(ink.opacity(0.06))
-                HStack { Text(model.status).accessibilityIdentifier("status"); Spacer(); if let current = model.current { Text("\(current.width) × \(current.height)").monospacedDigit() }; Text("Beta 0.5.1 (17)") }
+                HStack { Text(model.status).accessibilityIdentifier("status"); Spacer(); if let current = model.current { Text("\(current.width) × \(current.height)").monospacedDigit() }; Text("Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—"))") }
                 Text("On your Mac: ⌃⌥⌘S opens finished screenshots · Keep Ludwig's Annotated Screenshots running.")
                     .accessibilityLabel("On your Mac: Control Option Command S opens finished screenshots. Keep Ludwig's Annotated Screenshots running.")
             }.font(.caption).foregroundStyle(AppPalette.secondary).padding(14).frame(maxWidth: .infinity, alignment: .leading).background(AppPalette.paper)
@@ -197,7 +197,7 @@ struct PairingView: View {
                 }
                 if let error = model.error { Text(error).foregroundStyle(.red).font(.callout).multilineTextAlignment(.center).frame(maxWidth: 420) }
                 if let cameraMessage { Text(cameraMessage).foregroundStyle(.red).font(.callout).multilineTextAlignment(.center) }
-                Text("Same local network · Keep the Mac app open\nThe connection is local HTTP, as in the Safari companion.").font(.caption).foregroundStyle(AppPalette.secondary).multilineTextAlignment(.center)
+                Text("Choose Nearby in Mac companion 0.6 or later. Keep both apps open and Wi-Fi and Bluetooth on. Nearby uses encrypted peer discovery. Older Mac QR codes still need a trusted private network.").font(.caption).foregroundStyle(AppPalette.secondary).multilineTextAlignment(.center).frame(maxWidth: 420)
             }.padding(32).frame(maxWidth: .infinity, maxHeight: .infinity).background(AppPalette.paper)
                 .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() }.disabled(model.busy) } }
                 .fullScreenCover(isPresented: $scanning) {

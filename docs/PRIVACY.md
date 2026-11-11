@@ -1,6 +1,6 @@
 # Privacy policy
 
-Effective 28 October 2026. Applies to Ludwig's Annotated Screenshots, including the iPad app listed as Ludwig's Annotated Screenshots.
+Effective 11 November 2026. Covers Mac 0.6.0, native iPad 1.0 and 1.1, and Safari. Applies to Ludwig's Annotated Screenshots, including the iPad app listed as Ludwig's Annotated Screenshots.
 
 ## What the app does
 
@@ -17,7 +17,9 @@ Files are not automatically deleted from the Mac. Starting a new session resets 
 
 ## Network and permissions
 
-The Mac and iPad communicate over **unencrypted local HTTP**, authenticated by a pairing key. Use a trusted private network. Authentication is not transport encryption: a party able to observe local traffic may see images or credentials. Do not expose or port-forward the service to the Internet. A QR code/pairing link grants access to the local screenshot library; keep it private.
+**Nearby mode (Mac 0.6.0 and iPad 1.1+)** authenticates both devices with the pairing key and encrypts transfers using Apple's TLS implementation. Bonjour advertises a derived identifier, not the key; nearby devices can observe that identifier. No developer-operated relay receives screenshots.
+
+**Safari / iPad 1.0 mode** uses unencrypted local HTTP authenticated by a pairing key. The Mac keeps this legacy service available for compatibility. Use it only on a trusted private network; an observer may see images or credentials. Nearby encryption does not protect simultaneous legacy HTTP traffic. Do not expose or port-forward the service to the Internet. Keep QR codes and pairing links private.
 
 Camera access is used to scan the Mac’s pairing QR code. Local Network access connects to the Mac. The app does not record or upload camera footage. The Mac may request Documents access to read and save screenshots.
 
