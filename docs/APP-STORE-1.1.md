@@ -2,6 +2,12 @@
 
 Release authorized by the owner on 11 November 2026 following physical different-network testing. Preserve existing free pricing, US-only availability, review contact, and automatic release after approval. Submission status must be verified separately from upload.
 
+## Verified submission
+
+Submitted 11 November 2026 at 6:15 PM EST. App Store Connect confirmed **Waiting for Review** for **1.1 (21)**, with automatic release after approval. Submission ID: `7bdcaa4e-d1bb-4013-9286-0b2ccdc15fee`. The public iPad version remains 1.0 until Apple approves and releases the update.
+
+Submission details: https://appstoreconnect.apple.com/apps/6827539095/distribution/reviewsubmissions/details/7bdcaa4e-d1bb-4013-9286-0b2ccdc15fee
+
 ## What is new
 
 New Nearby pairing connects your iPad to the Mac companion using encrypted transfers. Keep Wi-Fi and Bluetooth on and both apps open; the devices can be on different Wi-Fi networks.
