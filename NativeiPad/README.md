@@ -6,11 +6,11 @@ See [build instructions](../docs/BUILDING.md), [setup](../docs/GETTING-STARTED.m
 
 The native app and Safari companion share the same local Mac protocol, but keep their pairing credentials and unfinished drafts separately. Saves are full-resolution flattened PNGs, limited to 16 million pixels. Local retry data includes a stable submission ID so a dropped response does not duplicate an export.
 
-## Release status — 10 November 2026
+## Release status — 12 November 2026
 
-The iPad app is **available free on the [US App Store](https://apps.apple.com/us/app/ludwigs-annotated-screenshots/id6827539095)** and appears in Apple’s iPad search for its full name. App Store Connect required a fresh sign-in during this check; availability was verified directly on the public storefront.
+The iPad app is **available free on the [US App Store](https://apps.apple.com/us/app/ludwigs-annotated-screenshots/id6827539095)**. Version 1.1 and its Nearby release notes were verified directly on the public storefront.
 
-The working source is **1.1 (21), unreleased**. It adds encrypted nearby pairing with Mac companion 0.6.0 (15), using Apple peer-to-peer networking. Existing local-HTTP pairing remains compatible. Physical guest-network validation and App Store review are still required before releasing it. See [nearby connection notes](../docs/NEARBY-CONNECTION.md).
+The current release is **1.1 (21)**; version 1.1 was verified live on the US App Store on 12 November 2026. It adds encrypted Nearby pairing with Mac companion 0.6.0 (16), using Apple peer-to-peer networking. Existing local-HTTP pairing remains compatible. The owner reported a successful different-network round trip and faster refresh on build 21. Actual isolated guest-network and broader hardware validation remain unverified. See [nearby connection notes](../docs/NEARBY-CONNECTION.md).
 
 The sections below document earlier builds and the features included in the public release.
 

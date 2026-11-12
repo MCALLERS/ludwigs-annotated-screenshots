@@ -15,7 +15,7 @@ Mac release: https://github.com/MCALLERS/ludwigs-annotated-screenshots/releases/
 
 Mac 0.6.0 (16) was published on 11 November 2026. The app and installer are Developer ID signed, notarized, and stapled. An anonymous download of the public DMG matched its published SHA-256 checksum, passed signature, Gatekeeper, and stapling checks, and passed packaged runtime/protocol verification after mounting. SHA-256: `babf579382dd545a8dda54247cbf21db6d1092790308c3749c02af9bb292d3cc`.
 
-iPad 1.1 (21) was submitted on 11 November 2026 at 6:15 PM EST. App Store Connect confirmed **Waiting for Review**, submission `7bdcaa4e-d1bb-4013-9286-0b2ccdc15fee`, with automatic release after approval. The current public iPad version remains 1.0; submission is not approval. The deployed website provides the 0.6.0 download and explains the correct pairing mode while 1.1 awaits release.
+iPad 1.1 (21) was submitted on 11 November 2026 at 6:15 PM EST. App Store Connect confirmed **Waiting for Review**, submission `7bdcaa4e-d1bb-4013-9286-0b2ccdc15fee`, with automatic release after approval. On 12 November 2026, the public US App Store listing confirmed **Version 1.1**, free, with its Nearby release notes. Automatic release completed. The website provides the Mac 0.6.0 download and directs current iPad users to Nearby pairing.
 
 ## Validation and limits
 

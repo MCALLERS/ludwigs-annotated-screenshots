@@ -15,9 +15,9 @@ Start at the [website](https://screenshot.bombadillo-ai.com) for the workflow, M
 | Component | Current status |
 | --- | --- |
 | Mac 0.6.0 (16) | Signed and notarized companion: [`v0.6.0`](https://github.com/MCALLERS/ludwigs-annotated-screenshots/releases/tag/v0.6.0). |
-| Native iPad App Store release | **Available free on the [US App Store](https://apps.apple.com/us/app/ludwigs-annotated-screenshots/id6827539095)**, verified 10 November 2026. Apple’s iPad search returns the app for its full name. |
+| Native iPad App Store release | **Version 1.1 available free on the [US App Store](https://apps.apple.com/us/app/ludwigs-annotated-screenshots/id6827539095)**, verified 12 November 2026. |
 
-Mac 0.6.0 adds encrypted **Nearby** pairing for native iPad **1.1 (21)**. The iPad update is awaiting App Store release; the current public iPad version remains 1.0. Until 1.1 is available, select **Safari / iPad 1.0** in the Mac pairing window and use the same trusted private network.
+Mac 0.6.0 adds encrypted **Nearby** pairing for native iPad **1.1 (21)**. iPad 1.1 is now available on the US App Store. Select **Nearby · iPad 1.1+** in the Mac pairing window and scan its QR inside the updated iPad app. Older iPad 1.0 and Safari still use **Safari / iPad 1.0** on the same trusted private network.
 
 With iPad 1.1+, keep Wi-Fi and Bluetooth enabled and the devices nearby. The owner confirmed a full round trip across different networks and faster screenshot arrival after the re-pairing fix. This does not guarantee every network or managed-device configuration. See [release notes](docs/RELEASE-0.6.0.md).
 

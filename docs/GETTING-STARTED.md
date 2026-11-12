@@ -4,7 +4,7 @@
 
 Start at the [website](https://screenshot.bombadillo-ai.com) for the Mac download and iPad App Store link.
 
-**11 November 2026:** Mac 0.6.0 supports both the current iPad App Store version 1.0 and the upcoming 1.1 Nearby update. The iPad update awaits its separate App Store release. Choose the pairing mode for your installed iPad version as described below.
+**12 November 2026:** iPad 1.1 is available on the US App Store. Use Mac 0.6.0 and select Nearby for the current iPad app. Mac 0.6.0 also supports older iPad 1.0 and Safari through legacy pairing, as described below.
 
 ## Install on your Mac
 

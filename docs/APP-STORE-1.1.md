@@ -4,7 +4,7 @@ Release authorized by the owner on 11 November 2026 following physical different
 
 ## Verified submission
 
-Submitted 11 November 2026 at 6:15 PM EST. App Store Connect confirmed **Waiting for Review** for **1.1 (21)**, with automatic release after approval. Submission ID: `7bdcaa4e-d1bb-4013-9286-0b2ccdc15fee`. The public iPad version remains 1.0 until Apple approves and releases the update.
+Submitted 11 November 2026 at 6:15 PM EST. App Store Connect confirmed **Waiting for Review** for **1.1 (21)**, with automatic release after approval. Submission ID: `7bdcaa4e-d1bb-4013-9286-0b2ccdc15fee`. On 12 November 2026, the public US App Store listing was verified to show **Version 1.1**, free, with the Nearby and polling-fix release notes. Automatic release completed.
 
 Submission details: https://appstoreconnect.apple.com/apps/6827539095/distribution/reviewsubmissions/details/7bdcaa4e-d1bb-4013-9286-0b2ccdc15fee
 
