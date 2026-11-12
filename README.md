@@ -51,6 +51,6 @@ There is no app account, analytics SDK, cloud relay, or AI service integration. 
 - [Agent workflow skill](skills/screenshot-feedback/SKILL.md)
 - [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
-The working source includes the unreleased nearby-connection update. See [nearby connection notes](docs/NEARBY-CONNECTION.md) and the [historical build 17 notes](NativeiPad/LOCAL-BUILD-17.md).
+The source includes the released Nearby connection update. See [nearby connection notes](docs/NEARBY-CONNECTION.md) and the [historical build 17 notes](NativeiPad/LOCAL-BUILD-17.md).
 
 The code is available under the [MIT license](LICENSE). The screenshot-and-pencil icon is an original vector mark; see [brand assets and provenance](Branding/ART-DIRECTION.md). This is an independent project, with no affiliation with Apple, OpenAI, Anthropic, or any fantasy franchise.
